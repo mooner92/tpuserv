@@ -29,21 +29,23 @@ const uploadMiddleware = upload.array("myFiles");
 app.post("/upload", uploadMiddleware, (req, res) => {
   const uploadedFilePath = req.files[0].path;
   const homeDir = os.homedir();
-  const pycoralPath = path.join(homeDir, "pycoral");
+  const pycoralPath = path.join(homeDir, "coral");
   const nd1Path = path.join(homeDir, "nd1");
 
   fs.access(pycoralPath, fs.constants.F_OK, (err) => {
     if (!err) {
       // ~/pycoral 디렉토리가 존재하는 경우
-      const pythonCommand = `python3 ~/pycoral/pycoral/examples/classify_image.py \
-        --model ~/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite \
-        --labels ~/pycoral/test_data/inat_bird_labels.txt \
+      console.log('coral exist!');
+      const pythonCommand = `python3 ~/coral/pycoral/examples/classify_image.py \
+        --model ~/coral/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite \
+        --labels ~/coral/pycoral/test_data/inat_bird_labels.txt \
         --input ${uploadedFilePath}`;
       executePythonCommand(pythonCommand);
     } else {
       // ~/pycoral 디렉토리가 없는 경우, ~/nd1 디렉토리를 확인
       fs.access(nd1Path, fs.constants.F_OK, (err) => {
         if (!err) {
+            console.log('coral is unexist but nd1 is exist!');
           // ~/nd1 디렉토리가 존재하는 경우
           const pythonCommand = `python3 ~/nd1/coral/pycoral/examples/ci4.py \
             --model ~/nd1/coral/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant.tflite \
@@ -51,6 +53,7 @@ app.post("/upload", uploadMiddleware, (req, res) => {
             --input ${uploadedFilePath}`;
           executePythonCommand(pythonCommand);
         } else {
+            console.log('both unexist!')
           // 둘 다 존재하지 않는 경우
           return res.status(500).send("Error: Neither pycoral nor nd1 directories exist.");
         }
