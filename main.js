@@ -77,6 +77,6 @@ app.post("/upload", uploadMiddleware, (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("Server is running at 3000");
+app.listen(12345, () => {
+  console.log("Server is running at 12345");
 });
