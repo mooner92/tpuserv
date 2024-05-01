@@ -6,17 +6,47 @@ const uuid4 = require("uuid4");
 const path = require("path");
 const nodeName = process.env.NODE_NAME; // 환경 변수에서 nodeName을 가져옵니다.
 app.use(express.static(path.join(__dirname, "public")));
-const cors = require('cors');
+//const cors = require('cors');
 
 // CORS 미들웨어 설정 전에 로깅 미들웨어를 추가
-app.use((req, res, next) => {
-    console.log('Received Request:', req.method, req.url);
-    console.log('Origin:', req.headers.origin);
-    console.log('CORS Headers:', JSON.stringify(req.headers['access-control-request-headers']));
-    next();
-  });
+// app.use((req, res, next) => {
+//     console.log('Full URL:', req.protocol + '://' + req.get('host') + req.originalUrl);
+//     console.log('Path:', req.path);
+//     console.log('Received Request:', req.method, req.url);
+//     console.log('Origin:', req.headers.origin);
+//     console.log('CORS Headers:', JSON.stringify(req.headers['access-control-request-headers']));
+//     console.log('Sending CORS Headers:', res.getHeader('Access-Control-Allow-Origin'));
+//     res.header("Access-Control-Allow-Origin", "*"); // 모든 도메인에서의 요청 허용
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//     if (req.method === 'OPTIONS') {
+//         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+//         return res.status(200).json({});
+//     }
+//     next();
+// });
+
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*"); // 모든 도메인에서의 요청 허용
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    
+// });
+
+
+
   
-app.use(cors()); // 모든 도메인의 요청을 허용
+  
+// const corsOptions = {
+//     origin: '*', // 모든 도메인에서의 요청 허용
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 허용할 HTTP 메소드
+//     allowedHeaders: ['Content-Type', 'Authorization'], // 허용할 헤더
+//     credentials: true, // 쿠키 허용
+//     preflightContinue: false, // OPTIONS 요청에 대해 별도의 응답을 보내지 않음
+//     optionsSuccessStatus: 204 // OPTIONS 요청 성공 상태 코드
+// };
+
+//app.use(cors(corsOptions));
+
 const upload = multer({
   storage: multer.diskStorage({
     filename(req, file, done) {
