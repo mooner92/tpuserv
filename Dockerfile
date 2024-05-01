@@ -20,6 +20,8 @@ RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" >
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
     && apt-get update && apt-get install -y libedgetpu1-std python3-pycoral
 
+#maximum operating install
+RUN sudo apt-get install libedgetpu1-max
 # Coral 디렉토리 생성 및 pycoral 라이브러리 클론
 WORKDIR /coral
 RUN git clone https://github.com/google-coral/pycoral.git
