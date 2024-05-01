@@ -21,7 +21,7 @@ const upload = multer({
 const uploadMiddleware = upload.array("myFiles");
 
 
-app.post("/", uploadMiddleware, (req, res) => {
+app.post("/yes-tpu/return", uploadMiddleware, (req, res) => {
     let results = [];
     let promises = req.files.map(file => {
         return new Promise((resolve, reject) => {
