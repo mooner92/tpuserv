@@ -4,7 +4,7 @@ const app = express();
 const multer = require("multer");
 const uuid4 = require("uuid4");
 const path = require("path");
-
+const nodeName = process.env.NODE_NAME; // 환경 변수에서 nodeName을 가져옵니다.
 app.use(express.static(path.join(__dirname, "public")));
 
 const upload = multer({
@@ -20,47 +20,51 @@ const upload = multer({
 
 const uploadMiddleware = upload.array("myFiles");
 
-app.post("/upload", uploadMiddleware, (req, res) => {
-  req.files.forEach(file => {
-    let pythonCommand;
 
-    if (nodeName === 'nodeone') {
-      // nodeone의 경우 실행할 Python 커맨드
-      pythonCommand = `python3 ~/nd1/coral/pycoral/examples/ci4.py \
-        --model ~/nd1/coral/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant.tflite \
-        --labels ~/nd1/coral/pycoral/test_data/inat_bird_labels.txt \
-        --input ${file.path}`;
-    } else if (nodeName === 'nodetwo' || nodeName === 'nodethree') {
-      // nodetwo 또는 nodethree의 경우 실행할 Python 커맨드
-      pythonCommand = `python3 ~/coral/pycoral/examples/classify_image.py \
-        --model ~/coral/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite \
-        --labels ~/coral/pycoral/test_data/inat_bird_labels.txt \
-        --input ${file.path}`;
-    } else {
-      // 알려지지 않은 노드 이름인 경우
-      return res.status(500).send("Error: Node name does not match any specific conditions.");
-    }
+app.post("/", uploadMiddleware, (req, res) => {
+    let results = [];
+    let promises = req.files.map(file => {
+        return new Promise((resolve, reject) => {
+            let pythonCommand;
+            if (nodeName === 'nodeone') {
+                console.log(`Processing on nodeone: ${file.filename}`);
+                pythonCommand = `python3 /coral/pycoral/examples/ci4.py \
+                --model /coral/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant.tflite \
+                --labels /coral/pycoral/test_data/inat_bird_labels.txt \
+                --input ${file.path}`;
+            } else if (nodeName === 'nodetwo' || nodeName === 'nodethree') {
+                console.log(`Processing on nodetwo or nodethree: ${file.filename}`);
+                pythonCommand = `python3 /coral/pycoral/examples/classify_image.py \
+                --model /coral/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant.tflite \
+                --labels /coral/pycoral/test_data/inat_bird_labels.txt \
+                --input ${file.path}`;
+            } else {
+                console.log("Error: Node name does not match any specific conditions.");
+                reject("Node name error");
+            }
 
-    // Python 커맨드 실행
-    executePythonCommand(pythonCommand, res);
-  });
+            exec(pythonCommand, (error, stdout, stderr) => {
+                if (error || stderr) {
+                    console.error(`Execution error for file ${file.filename}: ${error || stderr}`);
+                    results.push({file: file.filename, error: error.message || stderr});
+                    resolve(); // Continue with other files
+                } else {
+                    console.log(`Output for file ${file.filename}: ${stdout}`);
+                    results.push({file: file.filename, output: stdout});
+                    resolve();
+                }
+            });
+        });
+    });
+
+    Promise.all(promises).then(() => {
+        res.json(results); // Send combined results back to client
+    }).catch(err => {
+        res.status(500).send(`Error processing files: ${err}`);
+    });
 });
 
-function executePythonCommand(pythonCommand, res) {
-  exec(pythonCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return res.status(500).send(`Error: ${error.message}`);
-    }
-    if (stderr) {
-      console.error(`stderr: ${stderr}`);
-      return res.status(500).send(`Error: ${stderr}`);
-    }
-    console.log(`stdout: ${stdout}`);
-    res.send(stdout); // 각 파일 처리 결과를 바로 반환
-  });
-}
-
+  
 app.listen(12345, () => {
-  console.log("Server is running at 12345");
+  console.log("Server is running at port 12345");
 });
