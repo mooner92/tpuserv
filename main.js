@@ -88,11 +88,15 @@ app.post("/yes-tpu", uploadMiddleware, (req, res) => {
             exec(pythonCommand, (error, stdout, stderr) => {
                 if (error || stderr) {
                     console.error(`Execution error for file ${file.filename}: ${error || stderr}`);
-                    results.push({file: file.filename, error: error.message || stderr});
+                    results.push({node: nodeName, output: stdout});
                     resolve(); // Continue with other files
                 } else {
                     console.log(`Output for file ${file.filename}: ${stdout}`);
-                    results.push({file: file.filename, output: stdout});
+                    //file.filename
+                    const start = process.hrtime();
+                    results.push({node: nodeName, output: stdout});
+                    const end = process.hrtime(start);
+                    results.push({time : end}) //시간 측정
                     resolve();
                 }
             });
