@@ -96,7 +96,7 @@ app.post("/yes-tpu", uploadMiddleware, (req, res) => {
                     const start = process.hrtime();
                     //results.push({node: nodeName, output: stdout});
                     const end = process.hrtime(start);
-                    results.push({second : end[0],nanosec : end[1]}) //시간 측정
+                    results.push({node : nodeName,second : end[0],nanosec : end[1]}) //시간 측정
                     resolve();
                 }
             });
