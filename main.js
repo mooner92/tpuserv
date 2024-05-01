@@ -6,7 +6,8 @@ const uuid4 = require("uuid4");
 const path = require("path");
 const nodeName = process.env.NODE_NAME; // 환경 변수에서 nodeName을 가져옵니다.
 app.use(express.static(path.join(__dirname, "public")));
-
+const cors = require('cors');
+app.use(cors()); // 모든 도메인의 요청을 허용
 const upload = multer({
   storage: multer.diskStorage({
     filename(req, file, done) {
@@ -21,11 +22,13 @@ const upload = multer({
 const uploadMiddleware = upload.array("myFiles");
 
 
-app.post("/yes-tpu/return", uploadMiddleware, (req, res) => {
+app.post("/yes-tpu", uploadMiddleware, (req, res) => {
+    console.log("enter api no start")
     let results = [];
     let promises = req.files.map(file => {
         return new Promise((resolve, reject) => {
             let pythonCommand;
+            console.log('enter promise')
             if (nodeName === 'nodeone') {
                 console.log(`Processing on nodeone: ${file.filename}`);
                 pythonCommand = `python3 /coral/pycoral/examples/ci4.py \
@@ -56,7 +59,7 @@ app.post("/yes-tpu/return", uploadMiddleware, (req, res) => {
             });
         });
     });
-
+    console.log('upto return')
     Promise.all(promises).then(() => {
         res.json(results); // Send combined results back to client
     }).catch(err => {
