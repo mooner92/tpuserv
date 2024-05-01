@@ -7,6 +7,15 @@ const path = require("path");
 const nodeName = process.env.NODE_NAME; // 환경 변수에서 nodeName을 가져옵니다.
 app.use(express.static(path.join(__dirname, "public")));
 const cors = require('cors');
+
+// CORS 미들웨어 설정 전에 로깅 미들웨어를 추가
+app.use((req, res, next) => {
+    console.log('Received Request:', req.method, req.url);
+    console.log('Origin:', req.headers.origin);
+    console.log('CORS Headers:', JSON.stringify(req.headers['access-control-request-headers']));
+    next();
+  });
+  
 app.use(cors()); // 모든 도메인의 요청을 허용
 const upload = multer({
   storage: multer.diskStorage({
