@@ -18,10 +18,15 @@ RUN pip3 install tflite-runtime Pillow
 # Coral TPU 라이브러리 저장소 추가 및 설치
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" > /etc/apt/sources.list.d/coral-edgetpu.list \
     && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
-    && apt-get update && apt-get install -y libedgetpu1-std python3-pycoral
+    && apt-get update && apt-get install -y python3-pycoral
 
-#maximum operating install
-RUN apt-get install libedgetpu1-max
+# 필요한 패키지 설치 전에 debconf를 사용하여 자동 선택을 설정
+RUN echo 'libedgetpu1-max libedgetpu/accepted-eula boolean true' | debconf-set-selections
+
+# 이제 패키지 설치 진행
+RUN apt-get install -y libedgetpu1-max
+
+
 # Coral 디렉토리 생성 및 pycoral 라이브러리 클론
 WORKDIR /coral
 RUN git clone https://github.com/google-coral/pycoral.git
@@ -32,6 +37,7 @@ RUN bash examples/install_requirements.sh classify_image.py
 
 # 로컬에서 ci4.py 파일을 컨테이너 내의 해당 디렉토리로 복사
 COPY ./ci4.py /coral/pycoral/examples/ci4.py
+COPY ./ci3.py /coral/pycoral/examples/ci3.py
 
 # 애플리케이션 소스 파일 복사
 WORKDIR /nodeserver
