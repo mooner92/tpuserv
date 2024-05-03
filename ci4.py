@@ -8,6 +8,7 @@ from pycoral.adapters import classify
 from pycoral.adapters import common
 from pycoral.utils.dataset import read_label_file
 
+Image.MAX_IMAGE_PIXELS = None  # 경고 없이 모든 크기의 이미지를 처리
 def make_interpreter(model_file):
     model_file, *device = model_file.split('@')
     if device:
@@ -44,7 +45,7 @@ def main():
     args = parser.parse_args()
 
     labels = read_label_file(args.labels) if args.labels else {}
-
+    st = time.perf_counter()
     interpreter = make_interpreter(args.model)
     interpreter.allocate_tensors()
 
@@ -60,17 +61,20 @@ def main():
     np.clip(normalized_input, 0, 255, out=normalized_input)
     common.set_input(interpreter, normalized_input.astype(np.uint8))
 
-    print('----INFERENCE TIME----')
+    #print('----INFERENCE TIME----')
+    sec = 0.0
     for _ in range(args.count):
         start = time.perf_counter()
         interpreter.invoke()
         inference_time = time.perf_counter() - start
         classes = classify.get_classes(interpreter, args.top_k, args.threshold)
-        print('%.1fms' % (inference_time * 1000))
-
-    print('-------RESULTS--------')
-    for c in classes:
-        print('%s: %.5f' % (labels.get(c.id, c.id), c.score))
+        sec += (inference_time * 1000)
+    print('%.1fms' % sec)
+    # t = (time.perf_counter() - st)
+    # print('total_time : %.1fms'% t*1000)
+    #print('-------RESULTS--------')
+    # for c in classes:
+    #     print('%s: %.5f' % (labels.get(c.id, c.id), c.score))
 
 if __name__ == '__main__':
     main()

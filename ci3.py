@@ -39,7 +39,7 @@ from pycoral.adapters import common
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 
-
+Image.MAX_IMAGE_PIXELS = None  # 경고 없이 모든 크기의 이미지를 처리
 def main():
   parser = argparse.ArgumentParser(
       formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -67,10 +67,13 @@ def main():
   args = parser.parse_args()
 
   labels = read_label_file(args.labels) if args.labels else {}
-
+  s = 0.0
+  st = time.perf_counter()
   interpreter = make_interpreter(*args.model.split('@'))
   interpreter.allocate_tensors()
-
+  inf_time = time.perf_counter() - st
+  s += (inf_time * 1000)
+  print('model_load : %.1fms' % s)
   # Model must be uint8 quantized
   if common.input_details(interpreter, 'dtype') != np.uint8:
     raise ValueError('Only support uint8 input type.')
@@ -105,16 +108,20 @@ def main():
 #   print('----INFERENCE TIME----')
 #   print('Note: The first inference on Edge TPU is slow because it includes',
 #         'loading the model into Edge TPU memory.')
+  sec = 0.0
   for _ in range(args.count):
     start = time.perf_counter()
     interpreter.invoke()
     inference_time = time.perf_counter() - start
     classes = classify.get_classes(interpreter, args.top_k, args.threshold)
-    print('%.1fms' % (inference_time * 1000))
-
+    #print('%.1fms' % (inference_time * 1000))
+    sec += (inference_time * 1000)
+  print('invoke : %.1fms' % sec)
+#   t = (time.perf_counter() - st)
+#   print('total_time : %.1fms'% t*1000)
 #   print('-------RESULTS--------')
-  for c in classes:
-    print('%s: %.5f' % (labels.get(c.id, c.id), c.score))
+#   for c in classes:
+#     print('%s: %.5f' % (labels.get(c.id, c.id), c.score))
 
 
 if __name__ == '__main__':

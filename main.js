@@ -29,9 +29,10 @@ app.post("/yes-tpu", uploadMiddleware, async (req, res) => {
             const start = process.hrtime();
             const output = await executePythonCommand(pythonCommand);
             const end = process.hrtime(start);
+            //executionTime: `${end[0]}s ${end[1] / 1000000}ms`
             results.push({
                 node: nodeName,
-                executionTime: `${end[0]}s ${end[1] / 1000000}ms`
+                output : output
             });
         } catch (err) {
             results.push({
