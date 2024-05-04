@@ -36,8 +36,8 @@ WORKDIR /coral/pycoral
 RUN bash examples/install_requirements.sh classify_image.py
 
 # 로컬에서 ci4.py 파일을 컨테이너 내의 해당 디렉토리로 복사
-COPY ./ci4.py /coral/pycoral/examples/ci4.py
-COPY ./ci3.py /coral/pycoral/examples/ci3.py
+COPY ./ci6.py /coral/pycoral/examples/ci6.py
+COPY ./ci5.py /coral/pycoral/examples/ci5.py
 
 # 애플리케이션 소스 파일 복사
 WORKDIR /nodeserver
