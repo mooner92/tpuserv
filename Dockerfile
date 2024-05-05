@@ -38,6 +38,8 @@ RUN bash examples/install_requirements.sh classify_image.py
 # 로컬에서 ci4.py 파일을 컨테이너 내의 해당 디렉토리로 복사
 COPY ./ci6.py /coral/pycoral/examples/ci6.py
 COPY ./ci5.py /coral/pycoral/examples/ci5.py
+COPY ./inception_v4_299_quant_edgetpu.tflite /coral/pycoral/test_data/inception_v4_299_quant_edgetpu.tflite
+COPY ./inception_v4_299_quant.tflite /coral/pycoral/test_data/inception_v4_299_quant.tflite
 
 # 애플리케이션 소스 파일 복사
 WORKDIR /nodeserver

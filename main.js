@@ -48,10 +48,24 @@ app.post("/yes-tpu", uploadMiddleware, async (req, res) => {
 });
 
 function buildPythonCommand(nodeName) {
-    return `python3 /coral/pycoral/examples/${nodeName === 'nodeone' ? 'ci6' : 'ci5'}.py \
-            --model /coral/pycoral/test_data/mobilenet_v2_1.0_224_inat_bird_quant.tflite \
+    if(nodeName === 'nodeone'){
+        return `python3 /coral/pycoral/examples/ci6.py \
+            --model /coral/pycoral/test_data/inception_v4_299_quant.tflite \
             --directory ./files \
             --labels /coral/pycoral/test_data/inat_bird_labels.txt`;
+    }
+    else if(nodeName === 'nodetwo' || nodeName ==='nodethree'){
+        return `python3 /coral/pycoral/examples/ci5.py \
+            --model /coral/pycoral/test_data/inception_v4_299_quant_edgetpu.tflite \
+            --directory ./files \
+            --labels /coral/pycoral/test_data/inat_bird_labels.txt`;
+    }
+    else{
+        res.status(404).json({
+            message : "nodeName doesn't exist"
+        })
+    }
+    
 }
 
 function executePythonCommand(command) {
