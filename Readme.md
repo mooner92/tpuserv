@@ -65,4 +65,4 @@
 
 ## 노션 페이지
 
-[text](https://mooner92-pgslectures.notion.site/_1-01ec13e199fc409d9e5d71e0e9ee1349?pvs=4)
+[Notion Link](https://mooner92-pgslectures.notion.site/_1-01ec13e199fc409d9e5d71e0e9ee1349?pvs=4)
