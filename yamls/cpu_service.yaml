@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpu-service
+spec:
+  type: LoadBalancer
+  selector:
+    tpu: "no-tpu"
+  ports:
+    - protocol: TCP
+      port: 80  # 외부에서 서비스에 접근할 때 사용할 포트
+      targetPort: 3000  # Pod 내부에서 애플리케이션이 실행되는 포트
+

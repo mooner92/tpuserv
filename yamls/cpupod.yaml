@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cpupod
+  labels:
+    tpu: "no-tpu"
+spec:
+  containers:
+  - name: container-no-tpu
+    image: mooner92/imgserv:latest

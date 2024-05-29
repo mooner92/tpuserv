@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: yes-tpu-serv-ingress
+  namespace: with-affinity
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - grafanamk8s.info
+    secretName: secret1  # TLS를 위한 Secret 이름
+  rules:
+  - host: grafanamk8s.info
+    http:
+      paths:
+      - path: /yes-tpu
+        pathType: Prefix
+        backend:
+          service:
+            name: yes-tpu-service
+            port:
+              number: 80
+

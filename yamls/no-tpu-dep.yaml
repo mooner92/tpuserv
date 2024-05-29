@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: no-affinity-deployment
+  namespace: without-affinity
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "no-tpu"
+  template:
+    metadata:
+      labels:
+        app: "no-tpu"
+    spec:
+      containers:
+      - name: container-yes-tpu
+        image: docker.io/mooner92/tserv:v1
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+        volumeMounts:
+          - name: usb
+            mountPath: /dev/bus/usb
+      volumes:
+        - name: usb
+          hostPath:
+            path: /dev/bus/usb
+            type: Directory
+

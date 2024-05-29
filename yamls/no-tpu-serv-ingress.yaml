@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: no-tpu-serv-ingress
+  namespace: without-affinity
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: grafanamk8s.info
+    http:
+      paths:
+      - path: /no-tpu
+        pathType: Prefix
+        backend:
+          service:
+            name: no-tpu-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - grafanamk8s.info
+    secretName: secret1-non-affinity

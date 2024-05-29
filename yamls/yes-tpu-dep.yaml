@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yes-tpu-deployment
+  namespace: with-affinity
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "yes-tpu"
+  template:
+    metadata:
+      labels:
+        app: "yes-tpu"
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - nodetwo
+                - nodethree
+      containers:
+      - name: container-yes-tpu
+        image: docker.io/mooner92/tserv:v1
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        env:
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+        volumeMounts:
+          - name: usb
+            mountPath: /dev/bus/usb
+      volumes:
+        - name: usb
+          hostPath:
+            path: /dev/bus/usb
+            type: Directory
+

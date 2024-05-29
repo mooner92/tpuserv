@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tpupod
+  labels:
+    tpu: "yes-tpu"
+spec:
+  containers:
+  - name: container-yes-tpu
+    image: mooner92/imgserv:latest
