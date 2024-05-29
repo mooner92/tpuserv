@@ -1,0 +1,24 @@
+{"node":"nodethree","output":{"stdout":"Total inference time: 24743.8ms\nAverage inference time: 123.7ms\n"},"executionTime":"30s 280.382784ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24626.9ms\nAverage inference time: 123.1ms\n"},"executionTime":"30s 110.964815ms"}
+{"node":"nodetwo","output":{"stdout":"Total inference time: 24587.0ms\nAverage inference time: 122.9ms\n"},"executionTime":"30s 110.40531ms"}
+{"node":"nodetwo","output":{"stdout":"Total inference time: 24587.2ms\nAverage inference time: 122.9ms\n"},"executionTime":"30s 81.042037ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24859.7ms\nAverage inference time: 124.3ms\n"},"executionTime":"30s 353.834271ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24579.0ms\nAverage inference time: 122.9ms\n"},"executionTime":"30s 45.82979ms"}
+{"node":"nodetwo","output":{"stdout":"Total inference time: 24556.8ms\nAverage inference time: 122.8ms\n"},"executionTime":"29s 986.269863ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24633.1ms\nAverage inference time: 123.2ms\n"},"executionTime":"30s 65.465257ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24731.7ms\nAverage inference time: 123.7ms\n"},"executionTime":"30s 342.053072ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24639.0ms\nAverage inference time: 123.2ms\n"},"executionTime":"30s 179.929514ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24707.1ms\nAverage inference time: 123.5ms\n"},"executionTime":"30s 200.446559ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24733.9ms\nAverage inference time: 123.7ms\n"},"executionTime":"30s 257.807683ms"}
+{"node":"nodetwo","output":{"stdout":"Total inference time: 24496.9ms\nAverage inference time: 122.5ms\n"},"executionTime":"29s 876.904006ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24839.7ms\nAverage inference time: 124.2ms\n"},"executionTime":"30s 696.962901ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24776.9ms\nAverage inference time: 123.9ms\n"},"executionTime":"30s 302.863058ms"}
+{"node":"nodetwo","output":{"stdout":"Total inference time: 24545.6ms\nAverage inference time: 122.7ms\n"},"executionTime":"29s 965.954053ms"}
+{"node":"nodetwo","output":{"stdout":"Total inference time: 24464.6ms\nAverage inference time: 122.3ms\n"},"executionTime":"29s 846.878477ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24795.1ms\nAverage inference time: 124.0ms\n"},"executionTime":"30s 298.720594ms"}
+{"node":"nodetwo","output":{"stdout":"Total inference time: 24638.8ms\nAverage inference time: 123.2ms\n"},"executionTime":"30s 16.726185ms"}
+{"node":"nodethree","output":{"stdout":"Total inference time: 24580.0ms\nAverage inference time: 122.9ms\n"},"executionTime":"30s 51.784229ms"}
+
+// nodetwo 7번 평균 실행시간 = 약 29,983.45ms
+// nodethree 13번 평균 실행시간 = 약 30,245.16ms
+
